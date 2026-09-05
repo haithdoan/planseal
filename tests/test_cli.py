@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from planseal import __version__
 from planseal.cli import run
 from planseal.errors import PlanSealError
 from planseal.execution import ExecutionResult
@@ -183,7 +184,7 @@ def test_version_flag(capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as captured:
         run(["--version"])
     assert captured.value.code == 0
-    assert "planseal 0.1.0" in capsys.readouterr().out
+    assert f"planseal {__version__}" in capsys.readouterr().out
 
 
 def test_main_renders_sanitized_error(
