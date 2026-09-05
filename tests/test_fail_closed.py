@@ -92,7 +92,11 @@ def test_binding_rejects_wrong_name_lock_and_source(evidence: Evidence, reposito
             lockfile=repository / ".terraform.lock.hcl",
         )
     (repository / "main.tf").write_text("# changed revision\n", encoding="utf-8")
-    subprocess.run(["git", "add", "main.tf"], cwd=repository, check=True)
+    subprocess.run(
+        ["git", "add", "-f", ".terraform.lock.hcl", "main.tf"],
+        cwd=repository,
+        check=True,
+    )
     subprocess.run(
         ["git", "commit", "-m", "test: change lock"],
         cwd=repository,

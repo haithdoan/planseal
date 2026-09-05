@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    if: ${{ github.event_name != 'release' }}
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  artifacts:
+    if: ${{ always() && (github.event_name == 'release' || needs.release-please.outputs.release_created == 'true') }}
+    needs: release-please
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'release' && github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install -e '.[dev]' twine
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy src
+      - run: python scripts/check_version_consistency.py
+      - run: pytest --cov=planseal --cov-report=term-missing
+      - run: python -m build
+      - run: twine check dist/*
+      - name: Generate SHA256SUMS
+        run: |
+          (cd dist && sha256sum * > SHA256SUMS)
+          cat dist/SHA256SUMS
+      - name: Attest release artifacts
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: |
+            dist/*.whl
+            dist/*.tar.gz
+            dist/SHA256SUMS
+      - name: Upload artifacts to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.event_name == 'release' && github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+        run: gh release upload "$TAG_NAME" dist/* --clobber
+
+  publish-pypi:
+    if: ${{ always() && needs.artifacts.result == 'success' && vars.PUBLISH_PYPI == 'true' }}
+    needs: [release-please, artifacts]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'release' && github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install build
+      - run: python -m build
+      - uses: pypa/gh-action-pypi-publish@release/v1

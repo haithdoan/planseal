@@ -24,6 +24,7 @@ jobs:
       - run: ruff check .
       - run: ruff format --check .
       - run: mypy src
+      - run: python scripts/check_version_consistency.py
       - run: pytest --cov=planseal --cov-report=term-missing
       - if: matrix.python-version == '3.13'
         run: python -m build

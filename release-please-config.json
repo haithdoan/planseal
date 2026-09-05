@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "2c04b1a8b60cacc224d2f1018c28e5552aa3894e",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "planseal",
+      "include-component-in-tag": false,
+      "changelog-path": "CHANGELOG.md",
+      "pull-request-title-pattern": "chore: release ${version}",
+      "extra-files": [
+        "pyproject.toml",
+        "src/planseal/__init__.py"
+      ]
+    }
+  }
+}
