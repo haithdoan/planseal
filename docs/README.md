@@ -1,6 +1,7 @@
 # Documentation
 
 - [Getting started](getting-started.md)
+- [Minimal synthetic example](../examples/minimal/README.md)
 - [Architecture](architecture.md)
 - [Threat model](threat-model.md)
 - [Release process](release.md)

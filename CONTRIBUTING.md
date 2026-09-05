@@ -23,6 +23,13 @@ python -m build
 Tests must never execute a real Terraform or OpenTofu apply. Mock the executor
 boundary and use synthetic names and values in fixtures.
 
+Real-tool compatibility tests are opt-in locally and remain preview-only:
+
+```bash
+PLANSEAL_E2E_TOOL=terraform pytest tests/integration/test_real_tool.py -m integration -q
+PLANSEAL_E2E_TOOL=opentofu pytest tests/integration/test_real_tool.py -m integration -q
+```
+
 ## Pull requests
 
 - Keep changes focused and explain the threat or use case they address.

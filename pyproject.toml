@@ -47,6 +47,7 @@ packages = ["src/planseal"]
 [tool.pytest.ini_options]
 addopts = "--strict-markers --strict-config"
 testpaths = ["tests"]
+markers = ["integration: requires a real Terraform or OpenTofu executable"]
 
 [tool.coverage.run]
 branch = true

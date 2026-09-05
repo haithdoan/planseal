@@ -54,3 +54,17 @@ this repository, then set the repository variable `PUBLISH_PYPI` to `true`.
 
 Until that variable exists, releases still produce verified GitHub artifacts but
 do not publish to PyPI.
+
+## Owner checklist for public metadata
+
+Repository settings are owner-managed and are not changed by the release
+workflow. Before announcing a release, verify:
+
+- the description remains precise and does not overstate the alpha security
+  claim;
+- the topics include `terraform`, `opentofu`, `infrastructure-as-code`,
+  `devsecops`, `supply-chain-security`, `approval-workflow`, `ai-agents`, and
+  `cli`;
+- private vulnerability reporting remains enabled; and
+- the release artifacts, checksums, provenance attestation, and PyPI project
+  all identify the same version.

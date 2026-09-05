@@ -10,6 +10,26 @@
 PlanSeal requires a clean tracked worktree. Untracked files are ignored so the
 saved plan and local evidence files do not need to be committed.
 
+`pipx` is recommended for installing the published CLI in an isolated Python
+environment.
+
+## Install
+
+Install the latest published release:
+
+```bash
+pipx install planseal
+planseal --version
+```
+
+To install from a source checkout instead:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install .
+```
+
 ## Install for development
 
 ```bash
@@ -29,6 +49,9 @@ planseal keygen \
 The private key is written with mode `0600`. v0.1 stores an unencrypted PEM
 file; protect the host account and never commit the key. OS-backed encrypted
 key storage is future work.
+
+To exercise the complete preview-only flow without credentials or external
+providers, follow the [minimal synthetic example](../examples/minimal/README.md).
 
 ## Inspect
 

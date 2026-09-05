@@ -2,6 +2,10 @@
 
 **Cryptographic approval for saved infrastructure plans.**
 
+[![CI](https://github.com/haithdoan/planseal/actions/workflows/ci.yml/badge.svg)](https://github.com/haithdoan/planseal/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/haithdoan/planseal)](https://github.com/haithdoan/planseal/releases)
+[![License](https://img.shields.io/github/license/haithdoan/planseal)](LICENSE)
+
 PlanSeal proves that the Terraform or OpenTofu plan being offered for
 execution is exactly the plan a human approved: same file, same Git revision,
 same provider lockfile, and same resource-action scope.
@@ -29,14 +33,28 @@ An approval in chat or a CI button does not, by itself, bind the approval to
 the plan bytes, source revision, dependency lock, and action list. PlanSeal
 creates and verifies that binding.
 
+### Use PlanSeal when
+
+- a saved Terraform or OpenTofu plan is reviewed separately from execution;
+- an owner needs to authorize exact plan bytes and a bounded action scope;
+- a local or owner-operated workflow should remain independent of a hosted
+  approval service; or
+- automation or an AI agent prepares a plan but must not approve its own work.
+
+### Choose another control when
+
+- a managed platform already provides the complete plan/apply approval
+  lifecycle you need;
+- you require multi-party approval, hardware-backed signing, remote identity,
+  or centralized policy enforcement; or
+- you cannot protect saved plan files and the local owner key appropriately.
+
 ## Quick start
 
 Requirements: Python 3.11+, Git, and either OpenTofu or Terraform.
 
 ```bash
-git clone https://github.com/haithdoan/planseal.git
-cd planseal
-python -m pip install .
+pipx install planseal
 
 planseal keygen \
   --private-key ~/.config/planseal/owner-private.pem \
@@ -84,6 +102,10 @@ planseal apply \
 The last command is a preview. Add `--execute` only after reviewing its JSON
 output. Execution consumes the certificate nonce before starting the saved
 plan, so the certificate cannot be reused.
+
+For a credential-free walkthrough, use the
+[minimal synthetic example](examples/minimal/README.md). To install directly
+from source instead, see [Getting Started](docs/getting-started.md).
 
 ## What evidence contains
 
