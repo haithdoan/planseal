@@ -143,6 +143,19 @@ operational metadata.
 Read the [threat model](docs/threat-model.md) before using PlanSeal around
 sensitive infrastructure.
 
+## Authenticity
+
+The official source repository is
+[haithdoan/planseal](https://github.com/haithdoan/planseal). The official
+Python package is [planseal on PyPI](https://pypi.org/project/planseal/), and
+release artifacts are attached to
+[GitHub Releases](https://github.com/haithdoan/planseal/releases).
+
+Forks are welcome under the MIT License, but downstream distributions should
+not present themselves as the official PlanSeal project unless they are
+maintained by the upstream maintainer. See
+[Project Identity and Distribution](docs/project-identity.md).
+
 ## Project status
 
 PlanSeal v0.1 is an intentionally narrow proof of the exact-artifact approval
