@@ -36,7 +36,8 @@ Use Conventional Commits:
    `src/planseal/__init__.py`, and `.release-please-manifest.json`.
 4. Merge the release PR when you actually want to publish.
 5. The workflow creates the GitHub Release, builds the wheel and source
-   distribution, generates `SHA256SUMS`, and uploads the artifacts.
+   distribution, smoke-tests the wheel in a clean virtual environment,
+   generates `SHA256SUMS`, and uploads the artifacts.
 
 The release workflow also runs the same quality gates as CI before attaching
 artifacts to a GitHub Release.

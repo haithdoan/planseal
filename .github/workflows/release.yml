@@ -52,6 +52,11 @@ jobs:
       - run: pytest --cov=planseal --cov-report=term-missing
       - run: python -m build
       - run: twine check dist/*
+      - name: Smoke test wheel
+        run: |
+          python -m venv /tmp/planseal-wheel-smoke
+          /tmp/planseal-wheel-smoke/bin/python -m pip install dist/*.whl
+          /tmp/planseal-wheel-smoke/bin/planseal --version
       - name: Generate SHA256SUMS
         run: |
           (cd dist && sha256sum * > SHA256SUMS)
