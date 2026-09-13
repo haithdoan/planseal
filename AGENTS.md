@@ -13,6 +13,28 @@ and OpenTofu plans. Keep the project small, local-first, and deterministic.
   `pytest --cov=planseal --cov-report=term-missing` before committing.
 - Add or update tests before changing security-sensitive behavior.
 
+## Natural-language auto-work triggers
+
+When the owner says `auto-work: <goal>`, `hd-work: <goal>`, `background
+work: <goal>`, `overnight work: <goal>`, or otherwise asks for autonomous
+local work on this repo, route it through the separate `hd-work-os`
+project's `hd-work` CLI rather than improvising an ad hoc flow:
+
+```bash
+uv run --project /path/to/hd-work-os hd-work \
+  --db /path/to/hd-work-os/.hd-work-os/state.db \
+  ask "<goal>" --repo planseal --path <scope>
+uv run --project /path/to/hd-work-os hd-work --db <same db> work
+```
+
+Use `hd-work resume <work_item_id>` to continue an item a provider adapter
+paused (`PAUSED`) for owner review, `hd-work status` / `hd-work inbox` to
+report progress. Any R2/R3/R4, destructive, or external-write action still
+stops for owner approval per the safety boundaries below — `hd-work work`
+never bypasses them, never invokes a real Terraform/OpenTofu apply, and
+never runs `git push` on its own. Never say "Level 3" to the owner; it is
+internal terminology. Full contract: `hd-work-os/docs/usage/hd-work.md`.
+
 ## Safety boundaries
 
 - Never log or persist raw plan JSON, environment variables, credentials,
