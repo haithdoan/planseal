@@ -21,11 +21,16 @@ local work on this repo, route it through the separate `hd-work-os`
 project's `hd-work` CLI rather than improvising an ad hoc flow:
 
 ```bash
-uv run --project /path/to/hd-work-os hd-work \
-  --db /path/to/hd-work-os/.hd-work-os/state.db \
+HD_WORK_OS_PROJECT="${HD_WORK_OS_PROJECT:-../hd-work-os}"
+uv run --project "$HD_WORK_OS_PROJECT" hd-work \
+  --db "$HD_WORK_OS_PROJECT/.hd-work-os/state.db" \
   ask "<goal>" --repo planseal --path <scope>
-uv run --project /path/to/hd-work-os hd-work --db <same db> work
+uv run --project "$HD_WORK_OS_PROJECT" hd-work \
+  --db "$HD_WORK_OS_PROJECT/.hd-work-os/state.db" work
 ```
+
+`../hd-work-os` is the default sibling checkout path; set `HD_WORK_OS_PROJECT`
+only if this repo's checkout does not sit next to `hd-work-os/`.
 
 Use `hd-work resume <work_item_id>` to continue an item a provider adapter
 paused (`PAUSED`) for owner review, `hd-work status` / `hd-work inbox` to
